@@ -9,7 +9,7 @@ import pandas as pd
 mlflow.set_experiment("Sleep_Quality_Prediction - Yahya")
 
 # Load preprocessed dataset
-df = pd.read_csv(r'D:\KULIAH\Project\SML\Eksperimen_SML_Yahya\membangun_model\namadataset_preprocessing\sleep_data_processed.csv')
+df = pd.read_csv(r'D:\KULIAH\Project\SML\Eksperimen_SML_Yahya\Workflow-CI\MLProject\namadataset_preprocessing\sleep_data_processed.csv')
 X = df.drop('Sleep Quality', axis=1)
 y = df['Sleep Quality']
 
