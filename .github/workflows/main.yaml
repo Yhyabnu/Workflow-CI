@@ -12,17 +12,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Langkah ini menggantikan 'setup-python' dan 'install mlflow'.
-      # Ini akan menginstal Conda dan menginisialisasi shell dengan benar.
       - name: Set up Conda Environment
         uses: conda-incubator/setup-miniconda@v3
         with:
-          # Secara otomatis mengaktifkan lingkungan dasar conda
           auto-activate-base: true
-          # Membuat conda dapat diakses dari semua langkah berikutnya
           activate-environment: ''
 
-      # Langkah ini sekarang akan berjalan dengan sukses karena shell 
-      # sudah mengenali perintah-perintah conda yang dieksekusi oleh mlflow
+      # --- LANGKAH BARU YANG PENTING ---
+      # Setelah conda siap, kita instal MLflow ke dalam environment dasar
+      # yang sedang aktif di runner.
+      - name: Install MLflow
+        run: pip install mlflow==2.19.0
+
+      # Sekarang, langkah ini akan berhasil karena perintah 'mlflow' sudah ada.
       - name: Run MLflow Project
         run: mlflow run ./MLProject
