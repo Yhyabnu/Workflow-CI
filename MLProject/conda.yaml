@@ -1,0 +1,11 @@
+name: sleep_model_env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - pandas
+    - scikit-learn
+    - mlflow==2.17.0
