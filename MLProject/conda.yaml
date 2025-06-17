@@ -1,13 +1,10 @@
 name: sleep_model_env
-
 channels:
-  - conda-forge  # Jadikan conda-forge prioritas utama
-  - defaults     # Tetap sertakan defaults secara eksplisit
-
+  - conda-forge
+  - defaults
 dependencies:
-  # --- Paket utama diinstal langsung via Conda untuk stabilitas ---
-  - [cite_start]python=3.10 [cite: 1]
-  - [cite_start]pip [cite: 1]
-  - [cite_start]pandas [cite: 1]
-  - [cite_start]scikit-learn [cite: 1]
-  - [cite_start]mlflow=2.19.0 [cite: 1]
+  - python=3.10
+  - pip
+  - pandas
+  - scikit-learn
+  - mlflow=2.19.0
