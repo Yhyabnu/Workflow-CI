@@ -12,14 +12,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Conda and MLflow
+      - name: Set up Conda Environment
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-activate-base: false
-          activate-environment: sleep_model_env # Langsung aktivasi env dari conda.yaml
-          environment-file: MLProject/conda.yaml # Tunjuk file env
-          python-version: 3.10
+          activate-environment: sleep_model_env
+          environment-file: MLProject/conda.yaml
+          # Baris python-version dihapus dari sini untuk menghindari konflik.
+          # Versi Python sekarang sepenuhnya diatur oleh environment-file.
 
       - name: Run MLflow Project
-        shell: bash -l {0} # Pastikan shell diinisialisasi dengan benar untuk conda
+        shell: bash -l {0}
         run: mlflow run ./MLProject
