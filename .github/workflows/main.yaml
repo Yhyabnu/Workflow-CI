@@ -12,18 +12,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Conda Environment
+      - name: Set up Conda and MLflow
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate-base: true
-          activate-environment: ''
+          auto-activate-base: false
+          activate-environment: sleep_model_env # Langsung aktivasi env dari conda.yaml
+          environment-file: MLProject/conda.yaml # Tunjuk file env
+          python-version: 3.10
 
-      # --- LANGKAH BARU YANG PENTING ---
-      # Setelah conda siap, kita instal MLflow ke dalam environment dasar
-      # yang sedang aktif di runner.
-      - name: Install MLflow
-        run: pip install mlflow==2.19.0
-
-      # Sekarang, langkah ini akan berhasil karena perintah 'mlflow' sudah ada.
       - name: Run MLflow Project
+        shell: bash -l {0} # Pastikan shell diinisialisasi dengan benar untuk conda
         run: mlflow run ./MLProject
