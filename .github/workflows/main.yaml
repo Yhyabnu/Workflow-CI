@@ -1,40 +1,28 @@
-# Nama workflow yang akan muncul di tab "Actions" GitHub
 name: CI-CD ML Model
 
-# Mendefinisikan trigger (pemicu) untuk workflow ini
-# Workflow akan berjalan setiap kali ada 'push' ke branch 'main'
 on:
   push:
     branches: [ "main" ]
 
-# Mendefinisikan satu atau lebih pekerjaan (jobs) yang akan dijalankan
 jobs:
-  # Nama dari job kita, bisa apa saja
   train-and-validate:
-    # Menentukan bahwa job ini akan berjalan di environment Ubuntu terbaru
     runs-on: ubuntu-latest
-
-    # Mendefinisikan urutan langkah-langkah yang akan dieksekusi
+    
     steps:
-      # Langkah 1: Mengunduh (checkout) kode dari repository Anda
-      # agar workflow dapat mengaksesnya
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Langkah 2: Menyiapkan environment Python
-      # Tentukan versi Python yang sesuai dengan conda.yaml
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      # Langkah ini menggantikan 'setup-python' dan 'install mlflow'.
+      # Ini akan menginstal Conda dan menginisialisasi shell dengan benar.
+      - name: Set up Conda Environment
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: '3.10'
+          # Secara otomatis mengaktifkan lingkungan dasar conda
+          auto-activate-base: true
+          # Membuat conda dapat diakses dari semua langkah berikutnya
+          activate-environment: ''
 
-      # Langkah 3: Menginstal MLflow
-      # Kita perlu MLflow untuk dapat menjalankan perintah 'mlflow run'
-      - name: Install MLflow
-        run: pip install mlflow==2.19.0
-
-      # Langkah 4: Menjalankan MLflow Project
-      # Perintah ini akan secara otomatis membuat environment conda
-      # dari file 'conda.yaml' dan menjalankan skrip 'modelling.py'
+      # Langkah ini sekarang akan berjalan dengan sukses karena shell 
+      # sudah mengenali perintah-perintah conda yang dieksekusi oleh mlflow
       - name: Run MLflow Project
         run: mlflow run ./MLProject
