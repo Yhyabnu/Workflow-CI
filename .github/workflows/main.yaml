@@ -1,27 +1,24 @@
-name: ML Training CI
+name: CI-CD ML Model
+
 on:
   push:
-    branches: [main]
-jobs:
-  train:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Conda
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        activate-environment: sleep_quality_env
-        environment-file: MLProject/conda.yaml
-        python-version: 3.12
-    - name: Install MLflow
-      run: |
-        conda activate sleep_quality_env
-        pip install mlflow==2.17.0
-    - name: Run MLflow Project
-      run: |
-        mlflow run MLProject -P experiment_name=Sleep_Quality_Prediction_CI
+    branches: [ "main" ]
 
-        - name: Debug Environment
-  run: |
-    conda list
-    pip list
+jobs:
+  train-and-validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda Environment
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+
+      - name: Install MLflow in Base Environment
+        run: pip install mlflow==2.19.0
+
+      - name: Run MLflow Project
+        run: mlflow run ./MLProject
