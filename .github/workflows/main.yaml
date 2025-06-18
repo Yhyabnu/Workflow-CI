@@ -1,26 +1,27 @@
-name: CI-CD ML Model
-
+name: ML Training CI
 on:
   push:
-    branches: [ "main" ]
-
+    branches: [main]
 jobs:
-  train-and-validate:
+  train:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Conda Environment
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-activate-base: false
-          activate-environment: sleep_model_env
-          environment-file: MLProject/conda.yaml
-          # Baris python-version dihapus dari sini untuk menghindari konflik.
-          # Versi Python sekarang sepenuhnya diatur oleh environment-file.
-
-      - name: Run MLflow Project
-        shell: bash -l {0}
-        run: mlflow run ./MLProject
+    - uses: actions/checkout@v3
+    - name: Set up Conda
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        activate-environment: sleep_quality_env
+        environment-file: MLProject/conda.yaml
+        python-version: 3.12
+    - name: Install dependencies
+      run: |
+        conda activate sleep_quality_env
+        pip install mlflow==2.17.0
+    - name: Run MLflow Project
+      run: |
+        mlflow run MLProject -P experiment_name=Sleep_Quality_Prediction_CI
+    - name: Upload MLflow artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mlflow-artifacts
+        path: mlruns/
