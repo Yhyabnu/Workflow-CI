@@ -13,15 +13,15 @@ jobs:
         activate-environment: sleep_quality_env
         environment-file: MLProject/conda.yaml
         python-version: 3.12
-    - name: Install dependencies
+    - name: Install MLflow
       run: |
         conda activate sleep_quality_env
         pip install mlflow==2.17.0
     - name: Run MLflow Project
       run: |
         mlflow run MLProject -P experiment_name=Sleep_Quality_Prediction_CI
-    - name: Upload MLflow artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: mlflow-artifacts
-        path: mlruns/
+
+        - name: Debug Environment
+  run: |
+    conda list
+    pip list
