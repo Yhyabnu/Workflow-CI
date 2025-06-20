@@ -1,4 +1,4 @@
-name: SleepDisorderPrediction
+name: Sleep_Quality_Prediction
 
 conda_env: conda.yaml
 

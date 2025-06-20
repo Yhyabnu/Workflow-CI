@@ -1,29 +1,27 @@
-name: CI-CD ML Model
-
+name: ML Training CI
 on:
   push:
-    branches: [ "main" ]
-
+    branches: [main]
 jobs:
-  train-and-validate:
+  train:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Conda Environment
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-activate-base: true
-
-      - name: Install MLflow in Base Environment
-        run: pip install mlflow==2.19.0
-
-      # --- PERBAIKAN UTAMA ADA DI SINI ---
-      - name: Run MLflow Project
-        # Menambahkan 'shell: bash -l {0}' akan menjalankan perintah
-        # dalam 'login shell', yang memastikan conda sudah terinisialisasi
-        # dengan benar dan perintah 'activate' dapat ditemukan.
-        shell: bash -l {0}
-        run: mlflow run ./MLProject
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set up Conda Environment
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        activate-environment: sleep_quality_env
+        environment-file: MLProject/conda.yaml
+        python-version: 3.10
+        auto-activate-base: false
+    - name: Debug Environment
+      run: |
+        conda info
+        conda list
+        pip list
+        ls -R MLProject
+    - name: Run MLflow Project
+      run: |
+        conda run -n sleep_quality_env mlflow run MLProject -P experiment_name=Sleep_Quality_Prediction_Yahya
