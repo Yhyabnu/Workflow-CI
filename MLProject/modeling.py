@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score
 import pandas as pd
 
 # Set MLflow experiment
-mlflow.set_experiment("Sleep_Quality_Prediction - Yahya")
+mlflow.set_experiment("Sleep_Quality_Prediction")
 
 # Load preprocessed dataset
 df = pd.read_csv('sleep_data_processed.csv')

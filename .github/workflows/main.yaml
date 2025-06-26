@@ -3,8 +3,6 @@ name: ML Model CI Workflow
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   train-and-validate:
@@ -14,28 +12,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Conda
-        uses: conda-incubator/setup-miniconda@v3
+      # 👇 INI DIA KODE YANG ANDA TANYAKAN
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          auto-activate-base: false
-          activate-environment: mlflow-env
-          environment-file: MLproject/conda.yaml
-          python-version: 3.9
+          python-version: '3.9'
 
-      - name: Install MLflow CLI
-        shell: bash -el {0}
+      - name: Install dependencies
         run: |
-          conda activate mlflow-env
+          python -m pip install --upgrade pip
           pip install mlflow==2.19.0
+          pip install numpy pandas scikit-learn matplotlib seaborn
+      # 👆 SAMPAI SINI
 
-      - name: Verify MLflow installation
-        shell: bash -el {0}
+      - name: Run ML Training
         run: |
-          conda activate mlflow-env
-          mlflow --version
-
-      - name: Run MLflow Project
-        shell: bash -el {0}
-        run: |
-          conda activate mlflow-env
-          mlflow run ./MLproject --no-conda
+          cd MLproject
+          python modeling.py
