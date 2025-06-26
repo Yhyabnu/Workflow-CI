@@ -1,27 +1,41 @@
-name: ML Training CI
+name: ML Model CI Workflow
+
 on:
   push:
-    branches: [main]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
-  train:
+  train-and-validate:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Set up Conda Environment
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        activate-environment: sleep_quality_env
-        environment-file: MLProject/conda.yaml
-        python-version: 3.10
-        auto-activate-base: false
-    - name: Debug Environment
-      run: |
-        conda info
-        conda list
-        pip list
-        ls -R MLProject
-    - name: Run MLflow Project
-      run: |
-        conda run -n sleep_quality_env mlflow run MLProject -P experiment_name=Sleep_Quality_Prediction_Yahya
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: false
+          activate-environment: mlflow-env
+          environment-file: MLproject/conda.yaml
+          python-version: 3.9
+
+      - name: Install MLflow CLI
+        shell: bash -el {0}
+        run: |
+          conda activate mlflow-env
+          pip install mlflow==2.19.0
+
+      - name: Verify MLflow installation
+        shell: bash -el {0}
+        run: |
+          conda activate mlflow-env
+          mlflow --version
+
+      - name: Run MLflow Project
+        shell: bash -el {0}
+        run: |
+          conda activate mlflow-env
+          mlflow run ./MLproject --no-conda
