@@ -12,7 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 👇 INI DIA KODE YANG ANDA TANYAKAN
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -23,7 +22,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow==2.19.0
           pip install numpy pandas scikit-learn matplotlib seaborn
-      # 👆 SAMPAI SINI
 
       - name: Run ML Training
         run: |
